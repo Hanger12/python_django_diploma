@@ -1,22 +1,14 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status, parsers
-from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, action, parser_classes, permission_classes
-from rest_framework.parsers import JSONParser, FormParser
+from rest_framework import status
+from rest_framework.decorators import api_view, parser_classes, permission_classes
+from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK
-from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet, ViewSet
-from ast import literal_eval
 from io import BytesIO
 from .models import Profile
-from .serializers import UserSerializer, ProfileSerializer
+from .serializers import UserCreateSerializer, ProfileSerializer, ChangePasswordSerializer, ProfileUpdateSerializer
 
 
 # class UserViewSet(ModelViewSet):
@@ -67,11 +59,12 @@ def user_sign_up(request: Request) -> Response:
     if request.method == 'POST':
         stream = BytesIO(request.body)
         data = JSONParser().parse(stream)
-        serializer = UserSerializer(data={"first_name": data['name'],
-                                          "username": data['username'],
-                                          "password": data['password']})
+        serializer = UserCreateSerializer(data={"first_name": data['name'],
+                                                "username": data['username'],
+                                                "password": data['password']})
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data)
             user = authenticate(request, username=data['username'],
                                 password=data['password'])
             login(request=request, user=user)
@@ -79,15 +72,46 @@ def user_sign_up(request: Request) -> Response:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-# class ProfileViewSet(ModelViewSet):
-#     queryset = Profile.objects.select_related('user').all()
-#     serializer_class = ProfileSerializer
-
 @api_view(["POST", "GET"])
 def user_profile(request: Request) -> Response:
+    profile = request.user.profile
     if request.method == "GET":
-        return Response({
-            "fullName": "hord6",
-            "email": "asdasda@mail.ru",
-            "phone": "88002000600",
-        }, status=HTTP_200_OK)
+        serializer = ProfileSerializer(profile)
+        # print(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    if request.method == "POST":
+        fullName = request.data.get("fullName").split()
+        avatar = request.data.get('avatar').get("alt")
+        data = {
+            'avatar': avatar if avatar else None,
+            'middle_name': fullName[2],
+            'phone': request.data.get("phone"),
+            'user': {'first_name': fullName[1], 'email': request.data.get("email"), 'last_name': fullName[0]}
+        }
+        serializer = ProfileUpdateSerializer(instance=profile, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(ProfileSerializer(profile).data, status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+@parser_classes([MultiPartParser, ])
+def user_avatar(request: Request) -> Response:
+    if request.method == "POST":
+        profile = Profile.objects.get(user=request.user)
+        profile.avatar = request.FILES['avatar']
+        profile.save()
+        return Response(status=status.HTTP_201_CREATED)
+
+
+@api_view(["POST"])
+def user_update_password(request: Request) -> Response:
+    if request.method == "POST":
+        serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "Пароль успешно изменен"}, status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

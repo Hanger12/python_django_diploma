@@ -116,7 +116,6 @@ REST_FRAMEWORK = {
     # ],
 
 }
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -132,7 +131,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 LOGFILE_NAME = BASE_DIR / "log.txt"
 LOGFILE_SIZE = 1 * 1024 * 1024
 LOGFILE_COUNT = 4
