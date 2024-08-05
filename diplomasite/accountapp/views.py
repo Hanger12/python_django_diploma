@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from io import BytesIO
 from .models import Profile
 from .serializers import UserCreateSerializer, ProfileSerializer, ChangePasswordSerializer, ProfileUpdateSerializer
-
+from nameparser import HumanName
 
 # class UserViewSet(ModelViewSet):
 #     queryset = User.objects.all()
@@ -80,13 +80,26 @@ def user_profile(request: Request) -> Response:
         # print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
     if request.method == "POST":
+        print(request.data)
         fullName = request.data.get("fullName").split()
-        avatar = request.data.get('avatar').get("alt")
+        first_name = ""
+        middle_name = ""
+        last_name = ""
+        if len(fullName) == 2:
+            first_name = fullName[1]
+            last_name = fullName[0]
+        elif len(fullName) == 3:
+            first_name = fullName[1]
+            middle_name = fullName[2]
+            last_name = fullName[0]
+        elif len(fullName) == 1:
+            first_name = fullName[0]
+        avatar = request.data.get('avatar')
         data = {
-            'avatar': avatar if avatar else None,
-            'middle_name': fullName[2],
+            'avatar': avatar["alt"] if avatar else None,
+            'middle_name': middle_name,
             'phone': request.data.get("phone"),
-            'user': {'first_name': fullName[1], 'email': request.data.get("email"), 'last_name': fullName[0]}
+            'user': {'first_name': first_name, 'email': request.data.get("email"), 'last_name': last_name}
         }
         serializer = ProfileUpdateSerializer(instance=profile, data=data, partial=True)
         if serializer.is_valid():
