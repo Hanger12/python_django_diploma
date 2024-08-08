@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'frontend',
     'rest_framework',
     'phonenumber_field',
+    'taggit',
+    'django_filters',
     'rest_framework.authtoken',
     'accountapp.apps.AccountappConfig',
+    'shopapp.apps.ShopappConfig',
 
 ]
 
@@ -111,9 +114,10 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-    # ],
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
+    "PAGE_SIZE": 20,
 
 }
 # Internationalization
@@ -171,7 +175,7 @@ LOGGING = {
     #     },
     # },
     "root": {
-        "handlers": ['console', "logfile",],
+        "handlers": ['console', "logfile", ],
         "level": "DEBUG",
     }
 }
