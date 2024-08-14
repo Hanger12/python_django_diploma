@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'accountapp.apps.AccountappConfig',
     'shopapp.apps.ShopappConfig',
+    'testapp.apps.TestappConfig',
 
 ]
 
@@ -84,7 +85,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'localhost',
-        'PORT': 5432,
+        'PORT': 5000,
         'NAME': 'online_store_db',
         'USER': 'postgres',
         'PASSWORD': '12345',
@@ -109,6 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%d-%m-%Y %H:%M:%S",
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
@@ -125,7 +127,7 @@ REST_FRAMEWORK = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -141,43 +143,43 @@ LOGFILE_NAME = BASE_DIR / "log.txt"
 LOGFILE_SIZE = 1 * 1024 * 1024
 LOGFILE_COUNT = 4
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {
-            "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        }
-    },
-    # "filters": {
+    # 'version': 1,
+    # 'disable_existing_loggers': False,
+    # # "formatters": {
+    # #     "verbose": {
+    # #         "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    # #     }
+    # # },
+    # 'filters': {
     #     'require_debug_true': {
     #         '()': 'django.utils.log.RequireDebugTrue',
     #     },
     # },
-    "handlers": {
-        "console": {
-            # "level": 'DEBUG',
-            # "filters": ['require_debug_true'],
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
-        },
-        "logfile": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": LOGFILE_NAME,
-            "maxBytes": LOGFILE_SIZE,
-            "backupCount": LOGFILE_COUNT,
-            "formatter": "verbose",
-        },
-    },
-    # 'logger': {
+    # 'handlers': {
+    #     'console': {
+    #         'level': 'DEBUG',
+    #         'filters': ['require_debug_true'],
+    #         'class': 'logging.StreamHandler',
+    #         # "formatter": "verbose",
+    #     },
+    #     # 'logfile': {
+    #     #     "class": "logging.handlers.RotatingFileHandler",
+    #     #     "filename": LOGFILE_NAME,
+    #     #     "maxBytes": LOGFILE_SIZE,
+    #     #     "backupCount": LOGFILE_COUNT,
+    #     #     "formatter": "verbose",
+    #     # },
+    # },
+    # 'loggers': {
     #     'django.db.backends': {
     #         'level': 'DEBUG',
     #         'handlers': ['console'],
     #     },
     # },
-    "root": {
-        "handlers": ['console', "logfile", ],
-        "level": "DEBUG",
-    }
+    # 'root': {
+    #     'handlers': ['console',],
+    #     'level': 'DEBUG',
+    # }
 }
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
