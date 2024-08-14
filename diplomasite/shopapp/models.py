@@ -7,8 +7,25 @@ def product_images_directory_path(instance, filename: str):
     return "products/product_{id_product}/images/{filename}".format(id_product=instance.product.pk, filename=filename)
 
 
+def categories_image_directory_path(instance, filename: str):
+    return "categories/category_{id}/{filename}".format(id=instance.pk, filename=filename)
+
+
+class Category(models.Model):
+    title = models.CharField(max_length=100, db_index=True)
+    image = models.ImageField(null=True, blank=True, upload_to=categories_image_directory_path)
+    parent = models.ForeignKey('self',
+                               on_delete=models.CASCADE,
+                               related_name='subcategories',
+                               blank=True,
+                               null=True)
+
+    def __str__(self):
+        return self.title
+
+
 class Product(models.Model):
-    category = models.IntegerField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     title = models.CharField(max_length=100, db_index=True)
     description = models.TextField(null=False, blank=True, db_index=True)
     price = models.DecimalField(default=0, max_digits=8, decimal_places=2)
@@ -18,6 +35,9 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     tags = TaggableManager()
     rating = models.FloatField()
+
+    def __str__(self):
+        return f"{self.title}"
 
 
 class Reviews(models.Model):
@@ -29,9 +49,12 @@ class Reviews(models.Model):
 
 
 class Specification(models.Model):
-    product = models.ForeignKey(Product, related_name='specifications', on_delete=models.CASCADE)
+    product = models.ManyToManyField(Product, related_name='specifications')
     name = models.CharField(max_length=255)
     value = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.name}, {self.value}"
 
 
 class ImagesProduct(models.Model):

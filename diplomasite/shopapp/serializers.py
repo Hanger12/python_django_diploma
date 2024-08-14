@@ -2,7 +2,7 @@ from rest_framework import serializers
 from taggit.models import Tag
 from taggit.serializers import TagListSerializerField
 
-from .models import Product, ImagesProduct, Specification, Reviews
+from .models import Product, ImagesProduct, Specification, Reviews, Category
 
 
 class ImagesProductSerializer(serializers.ModelSerializer):
@@ -50,3 +50,19 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    subcategories = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Category
+        fields = ['id', 'title', 'image', 'subcategories']
+
+    def get_subcategories(self, obj):
+        subcategories = obj.subcategories.all()
+        return CategorySerializer(subcategories, many=True).data
+
+    def get_image(self, obj):
+        return {"src": obj.image.url, "alt": obj.image.name}
