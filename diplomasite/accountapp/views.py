@@ -9,7 +9,6 @@ from rest_framework.response import Response
 from io import BytesIO
 from .models import Profile
 from .serializers import UserCreateSerializer, ProfileSerializer, ChangePasswordSerializer, ProfileUpdateSerializer
-from nameparser import HumanName
 
 # class UserViewSet(ModelViewSet):
 #     queryset = User.objects.all()
@@ -73,6 +72,7 @@ def user_sign_up(request: Request) -> Response:
 
 
 @api_view(["POST", "GET"])
+@permission_classes([IsAuthenticated])
 def user_profile(request: Request) -> Response:
     profile = request.user.profile
     if request.method == "GET":

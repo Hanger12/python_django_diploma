@@ -49,12 +49,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="Rating">
+                                <div class="Rating-stars">
+                                    <h2 class="ProductCard-title">Рейтинг:</h2>
+                                    <!-- Отображение звезд рейтинга -->
+                                    <span v-for="star in 5" :key="star" class="Rating-star"
+                                          :class="{'Rating-star_view': product.rating >= star}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path d="M12 .587l3.668 7.431 8.232 1.187-5.955 5.788 1.4 8.157L12 18.896l-7.345 3.866 1.4-8.157-5.955-5.788 8.232-1.187L12 .587z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="Rating-star_view">
+                                    ${ product.rating }$ / 5
+                                </div>
+                            </div>
                             <div class="ProductCard-text">
-
                                 <!-- Описание как html -->
                                 <div v-html="product.description"></div>
                                 <!-- Описание как html -->
-
                             </div>
                             <div class="ProductCard-cart">
                                 <div class="ProductCard-cartElement ProductCard-cartElement_amount">
@@ -101,8 +115,6 @@
                         <div class="Tabs-wrap">
                             <div class="Tabs-block" id="description">
                                 <div v-html="product.fullDescription"></div>
-
-
                                 <div class="clearfix">
                                 </div>
                                 <div class="table">
@@ -180,7 +192,9 @@
                                             </div>
                                         </form>
                                     {% else %}
-                                        <div class="row-block"><a class="ControlPanel-title" href="/sign-in">Login / Register</a></div>
+                                        <div class="row-block"><a class="ControlPanel-title" href="/sign-in">Login /
+                                            Register</a> to leave a review.
+                                        </div>
                                     {% endif %}
                                 </div>
                             </div>

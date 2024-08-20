@@ -1,8 +1,14 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import ProductViewSet, ProductDetailView, PopularProductViewSet, LimitedProductViewSet, \
-    TagsViewSet, BasketView, CategoriesView, CurrentUser, ReviewsProductViewSet
+from .views import (ProductViewSet,
+                    PopularProductViewSet,
+                    LimitedProductViewSet,
+                    TagsViewSet,
+                    BasketView,
+                    CategoriesView,
+                    CurrentUser,
+                    ReviewsProductViewSet)
 
 app_name = "shopapp"
 router = DefaultRouter()

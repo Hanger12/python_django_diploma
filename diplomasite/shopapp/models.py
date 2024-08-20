@@ -34,7 +34,6 @@ class Product(models.Model):
     freeDelivery = models.BooleanField(default=False)
     available = models.BooleanField(default=True)
     tags = TaggableManager()
-    rating = models.FloatField()
 
     def __str__(self):
         return f"{self.title}"

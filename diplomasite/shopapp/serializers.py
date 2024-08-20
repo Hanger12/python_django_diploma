@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from rest_framework import serializers
 from taggit.models import Tag
 from taggit.serializers import TagListSerializerField
@@ -46,10 +47,23 @@ class ProductSerializer(serializers.ModelSerializer):
     specifications = SpecificationSerializer(many=True, read_only=True)
     reviews = ReviewsSerializer(many=True, read_only=True)
     images = ImagesProductSerializer(many=True, read_only=True)
+    fullDescription = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = '__all__'
+
+    def get_fullDescription(self, obj):
+        return obj.description
+
+    def get_description(self, obj):
+        return obj.description[:30] + '...'
+
+    def get_rating(self, obj):
+        average_rating = obj.reviews.aggregate(average=Avg('rate'))['average']
+        return round(average_rating, 2) if average_rating else 0.0
 
 
 class CategorySerializer(serializers.ModelSerializer):

@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'accountapp.apps.AccountappConfig',
     'shopapp.apps.ShopappConfig',
-    'testapp.apps.TestappConfig',
 
 ]
 

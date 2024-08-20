@@ -50,7 +50,7 @@ class ReviewInline(admin.TabularInline):
 @admin.register(Product)
 class ProductsAdmin(admin.ModelAdmin):
     list_display = ('pk', 'title', 'description', 'price', 'date', 'count',
-                    'freeDelivery', 'rating',)
+                    'freeDelivery',)
     list_display_links = "pk", "title"
     ordering = "title", "pk"
     search_fields = "title", "description", "price"
@@ -77,11 +77,6 @@ class ProductsAdmin(admin.ModelAdmin):
         ("price",
          {
              "fields": ("price",)
-         }),
-        ("rating",
-         {
-             "fields": ("rating",)
-
          }),
     ]
 

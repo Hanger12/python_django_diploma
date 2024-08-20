@@ -55,8 +55,7 @@ class ProductViewSet(ModelViewSet):
         queryset = queryset.annotate(review_count=Count('reviews'))
         category_id = self.request.query_params.get("category")
         if category_id:
-            category = Category.objects.get(id=category_id)
-            category_ids = self.get_all_category_ids(category)
+            category_ids = self.get_all_category_ids(category_id)
             queryset = queryset.filter(category_id__in=category_ids)
 
         sort_type = self.request.query_params.get("sortType")
@@ -70,6 +69,7 @@ class ProductViewSet(ModelViewSet):
 
     def get_all_category_ids(self, category):
         # Собираем все категории и подкатегории
+        category = Category.objects.prefetch_related('subcategories').get(id=category)
         categories = [category.id]
 
         def collect_subcategories(category):
@@ -93,14 +93,6 @@ class CurrentUser(APIView):
         return Response({'username': request.user.username, 'email': request.user.email}, status=status.HTTP_200_OK)
 
 
-class ProductDetailView(APIView):
-    def get(self, request, pk, format=None):
-        product = Product.objects.get(pk=pk)
-        serializer = ProductSerializer(product)
-        print(serializer.data)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 class ReviewsProductViewSet(APIView):
     def post(self, request, id):
         Reviews.objects.get_or_create(product_id=int(id),
@@ -108,7 +100,6 @@ class ReviewsProductViewSet(APIView):
                                       text=request.data['text'],
                                       rate=int(request.data['rate']))
         reviews = Reviews.objects.filter(product_id=int(id))
-        print(ReviewsSerializer(reviews, many=True, read_only=True).data)
         return Response(ReviewsSerializer(reviews, many=True, read_only=True).data, status=status.HTTP_200_OK)
 
 
