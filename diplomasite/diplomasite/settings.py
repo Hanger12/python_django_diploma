@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'accountapp.apps.AccountappConfig',
     'shopapp.apps.ShopappConfig',
+    'basketapp.apps.BasketappConfig',
 
 ]
 
@@ -183,4 +184,5 @@ LOGGING = {
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
+# CART_SESSION_ID = 'cart'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -82,15 +82,12 @@ class ProductViewSet(ModelViewSet):
         collect_subcategories(category)
         return categories
 
-    def get_url(self):
-        pass
-
 
 class CurrentUser(APIView):
-    permission_classes = [IsAuthenticated]
-
     def get(self, request):
-        return Response({'username': request.user.username, 'email': request.user.email}, status=status.HTTP_200_OK)
+        if request.user.is_authenticated:
+            return Response({'username': request.user.username, 'email': request.user.email}, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
 
 class ReviewsProductViewSet(APIView):
@@ -101,41 +98,6 @@ class ReviewsProductViewSet(APIView):
                                       rate=int(request.data['rate']))
         reviews = Reviews.objects.filter(product_id=int(id))
         return Response(ReviewsSerializer(reviews, many=True, read_only=True).data, status=status.HTTP_200_OK)
-
-
-class BasketView(APIView):
-    def get(self, request: Request, format=None):
-        data = [
-            {
-                "id": 123,
-                "category": 55,
-                "price": 500,
-                "count": 1,
-                "date": "Thu Feb 09 2023 21:39:52 GMT+0100 (Central European Standard Time)",
-                "title": "video card",
-                "description": "description of the product",
-                "freeDelivery": True,
-                "images": [
-                    {
-                        "src": "/3.png",
-                        "alt": "Image alt string"
-                    }
-                ],
-                "tags": [
-                    {
-                        "id": 12,
-                        "name": "Gaming"
-                    }
-                ],
-                "reviews": 5,
-                "rating": 4.6
-            }
-        ]
-        return Response(data, status=status.HTTP_200_OK)
-
-    def post(self, request: Request, format=None):
-        print(request.data)
-        return Response(status=status.HTTP_200_OK)
 
 
 class CategoriesView(APIView):
