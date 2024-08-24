@@ -23,7 +23,8 @@ urlpatterns = [
     path('api/', include([
         path('', include('accountapp.urls')),
         path('', include('shopapp.urls')),
-        path('', include('basketapp.urls'))
+        path('', include('basketapp.urls')),
+        path('', include('ordersapp.urls')),
     ])),
     path('admin/', admin.site.urls),
 ]

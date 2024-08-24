@@ -33,14 +33,17 @@ class BasketView(APIView):
         """GET запрос обабатывает вывод товаров, находящиеся в корзине"""
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)
-            if created:
-                cart_session = request.session.get('cart', {})
-                if not cart_session == {}:
-                    for product_id, item in cart_session.items():
-                        product = Product.objects.only('id').get(id=product_id)
-                        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+            cart_session = request.session.get('cart', {})
+            if not cart_session == {}:
+                for product_id, item in cart_session.items():
+                    product = Product.objects.only('id').get(id=product_id)
+                    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+                    if created:
                         cart_item.count = item['quantity']
-                        cart_item.save()
+                    else:
+                        cart_item.count += item['quantity']
+                    cart_item.save()
+                request.session.pop('cart', None)
             serializer = CartSerializer(cart)
             print(serializer.data)
             return Response(serializer.data['items'], status=status.HTTP_200_OK)
