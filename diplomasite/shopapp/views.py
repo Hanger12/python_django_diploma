@@ -97,6 +97,7 @@ class ReviewsProductViewSet(APIView):
                                       text=request.data['text'],
                                       rate=int(request.data['rate']))
         reviews = Reviews.objects.filter(product_id=int(id))
+        print(ReviewsSerializer(reviews, many=True, read_only=True).data)
         return Response(ReviewsSerializer(reviews, many=True, read_only=True).data, status=status.HTTP_200_OK)
 
 

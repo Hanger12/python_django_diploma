@@ -46,8 +46,8 @@ var mix = {
             }).then(({data}) => {
                 this.product.reviews = data
                 alert('Отзыв опубликован')
-                this.review.author = ''
-                this.review.email = ''
+                this.review.author = this.currentUser.username
+                this.review.email = this.currentUser.email
                 this.review.text = ''
                 this.review.rate = 5
             }).catch(() => {

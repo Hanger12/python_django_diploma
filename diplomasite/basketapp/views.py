@@ -45,7 +45,7 @@ class BasketView(APIView):
                     cart_item.save()
                 request.session.pop('cart', None)
             serializer = CartSerializer(cart)
-            print(serializer.data)
+            # print(serializer.data)
             return Response(serializer.data['items'], status=status.HTTP_200_OK)
         else:
             cart = request.session.get('cart', {})
