@@ -33,8 +33,4 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['user', 'items']
-
-        def to_representation(self, instance):
-            representation = super().to_representation(instance)
-            return representation.pop('product') if 'product' in representation else representation
+        fields = ['items']
