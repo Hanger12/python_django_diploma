@@ -5,7 +5,6 @@ from .views import (ProductViewSet,
                     PopularProductViewSet,
                     LimitedProductViewSet,
                     TagsViewSet,
-                    BasketView,
                     CategoriesView,
                     CurrentUser,
                     ReviewsProductViewSet)
@@ -21,6 +20,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('current_user', CurrentUser.as_view(),),
     path('product/<int:id>/reviews', ReviewsProductViewSet.as_view(),),
-    path('basket', BasketView.as_view(), name='basket'),
     path('categories', CategoriesView.as_view(), name='categories'),
 ]

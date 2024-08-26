@@ -38,6 +38,14 @@ class Product(models.Model):
     def __str__(self):
         return f"{self.title}"
 
+    def save(self, *args, **kwargs):
+        # Если количество товара равно 0, устанавливаем доступность как False
+        if self.count == 0:
+            self.available = False
+        else:
+            self.available = True
+        super().save(*args, **kwargs)
+
 
 class Reviews(models.Model):
     text = models.TextField(max_length=300, blank=True)

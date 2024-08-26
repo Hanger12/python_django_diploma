@@ -38,12 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'frontend',
     'rest_framework',
-    'phonenumber_field',
     'taggit',
     'django_filters',
-    'rest_framework.authtoken',
     'accountapp.apps.AccountappConfig',
     'shopapp.apps.ShopappConfig',
+    'basketapp.apps.BasketappConfig',
+    'ordersapp.apps.OrdersappConfig'
 
 ]
 
@@ -82,12 +82,8 @@ WSGI_APPLICATION = 'diplomasite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',
-        'PORT': 5000,
-        'NAME': 'online_store_db',
-        'USER': 'postgres',
-        'PASSWORD': '12345',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -183,4 +179,5 @@ LOGGING = {
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
+# CART_SESSION_ID = 'cart'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
