@@ -1,3 +1,5 @@
+import random
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from rest_framework import status
@@ -7,102 +9,67 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from accountapp.serializers import ProfileSerializer, UserSerializer
-from basketapp.serializers import CartSerializer
-from ordersapp.models import Order
-from ordersapp.serializers import OrderSerializer
+from basketapp.serializers import CartSerializer, ProductItemCartSerializer, CartItemSerializer
+from ordersapp.models import Order, DeliverySettings, OrderItem
+from ordersapp.serializers import OrderSerializer, DeliverySettingsSerializer
+from shopapp.models import Product
+from shopapp.serializers import ProductSerializer
+
+
+class OrdersView(APIView):
+    def get(self, request):
+        queryset = Order.objects.filter(user=request.user)
+        serializer_class = OrderSerializer(queryset, many=True)
+        print(serializer_class.data)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            print(request.data)
+            products_ids = []
+            order = Order.objects.create(user=request.user)
+            for data in request.data:
+                product_id = data.pop('id')
+                count = data.get('count')
+                product = Product.objects.get(id=product_id)
+                OrderItem.objects.create(order=order, product=product, count=count)
+            return Response({"orderId": order.pk}, status=status.HTTP_201_CREATED)
+
+
+class DeliverySettingsViewSet(ModelViewSet):
+    queryset = DeliverySettings.objects.all()
+    serializer_class = DeliverySettingsSerializer
 
 
 class OrderView(APIView):
-    permission_classes = [IsAuthenticated]
+    def get(self, request, id):
+        order = Order.objects.get(id=id)
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request):
-        if not request.user.is_authenticated:
-            return Response({'error': 'Пользователь не аутентифицирован'}, status=status.HTTP_401_UNAUTHORIZED)
+    def post(self, request, id):
+        order = Order.objects.get(id=id)
+        order_ser = OrderSerializer(instance=order, data=request.data, partial=True)
         print(request.data)
-        return Response({
-            "orderId": 123,
-        }, status=status.HTTP_200_OK)
-
-    def get(self, request):
-        data = [{
-            "id": 17,
-            "createdAt": "2023-05-05 12:12",
-            "fullName": "Annoying Orange",
-            "email": "no-reply@mail.ru",
-            "phone": "88002000600",
-            "deliveryType": "free",
-            "paymentType": "online",
-            "totalCost": 567.8,
-            "status": "accepted",
-            "city": "Moscow",
-            "address": "red square 1",
-            "products": [
-                {
-                    "id": 123,
-                    "category": 55,
-                    "price": 500.67,
-                    "count": 12,
-                    "date": "Thu Feb 09 2023 21:39:52 GMT+0100 (Central European Standard Time)",
-                    "title": "video card",
-                    "description": "description of the product",
-                    "freeDelivery": True,
-                    "images": [
-                        {
-                            "src": "/3.png",
-                            "alt": "Image alt string"
-                        }
-                    ],
-                    "tags": [
-                        {
-                            "id": 12,
-                            "name": "Gaming"
-                        }
-                    ],
-                    "reviews": 5,
-                    "rating": 4.6
-                }
-            ]
-        }]
-        return Response(data, status=status.HTTP_200_OK)
+        if order_ser.is_valid():
+            order_ser.save()
+        return Response(request.data, status=status.HTTP_200_OK)
 
 
-class OrdersViewSet(ModelViewSet):
-    queryset = Order.objects.all()
-    # serializer_class = OrderSerializer
+class PayMentView(APIView):
+    def get(self, request, id):
+        print(request.data)
+        return Response(status=status.HTTP_200_OK)
 
-    # permission_classes = [IsAuthenticated]
-
-    def create(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            print(request.data)
-            products = []
-            for product in request.data:
-                count = product.pop('count')
-                data_products = {
-                    'product': product,
-                    'count': count
-                }
-                products.append(data_products)
-            data = {
-                'user': request.user.pk}
-            # print(user_ser.data)
-            order = None
-            serializer = OrderSerializer(data=data)
-            if serializer.is_valid():
-                order = serializer.save()
-            print(serializer.errors)
-            # if serializer.is_valid():
-            #     pass
-            # print(serializer.errors)
-            # serializer.save()
-            # order = Order.objects.create(user=user)
-            # order = Order.objects.create(user=user)
-            # serializer = self.get_serializer(order)
-            # print(serializer.data)
-            # if serializer.is_valid(raise_exception=True):
-            #     serializer.save()
-            # print(serializer.errors)
-            # Создание заказа и связанных позиций заказа
-            # order = serializer.save()
-            return Response({"orderId": order.pk if order else 1}, status=status.HTTP_201_CREATED)
+    def post(self, request, id):
+        order = Order.objects.get(id=id)
+        number = request.data['number']
+        if int(number) % 2 == 0 and not number.endswith('0'):
+            order.status = "accepted"
+            order.paymentError = 'undefined'
+        else:
+            order.status = 'Failed'
+            order.paymentError = f"Ошибка: {random.choice(["Ошибка сети", "Проблемы с картой", "Неизвестная ошибка"])}"
+        order.save()
+        return Response(status=status.HTTP_200_OK)
 

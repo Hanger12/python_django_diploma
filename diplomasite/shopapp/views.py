@@ -109,7 +109,7 @@ class CategoriesView(APIView):
 
 
 class PopularProductViewSet(ModelViewSet):
-    queryset = Product.objects.prefetch_related("images").all()
+    queryset = Product.objects.prefetch_related("images").filter(available=True).order_by('-count')[:8]
     pagination_class = None
     serializer_class = ProductSerializer
 
