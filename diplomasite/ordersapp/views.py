@@ -11,7 +11,7 @@ from rest_framework.viewsets import ModelViewSet
 from accountapp.serializers import ProfileSerializer, UserSerializer
 from basketapp.serializers import CartSerializer, ProductItemCartSerializer, CartItemSerializer
 from ordersapp.models import Order, DeliverySettings, OrderItem
-from ordersapp.serializers import OrderSerializer, DeliverySettingsSerializer
+from ordersapp.serializers import OrderSerializer, DeliverySettingsSerializer, OrderItemSerializer
 from shopapp.models import Product
 from shopapp.serializers import ProductSerializer
 
@@ -58,13 +58,16 @@ class OrderView(APIView):
 
 class PayMentView(APIView):
     def get(self, request, id):
-        print(request.data)
         return Response(status=status.HTTP_200_OK)
 
     def post(self, request, id):
-        order = Order.objects.get(id=id)
+        order = Order.objects.get(id=id).only('id')
         number = request.data['number']
         if int(number) % 2 == 0 and not number.endswith('0'):
+            order_items = OrderItem.objects.filter(order=order).prefetch_related('products')
+            for item in order_items:
+                item.product.count += item.count
+                item.product.save()
             order.status = "accepted"
             order.paymentError = 'undefined'
         else:

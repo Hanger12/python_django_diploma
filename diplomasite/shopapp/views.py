@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Avg
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
@@ -48,11 +48,12 @@ class ProductViewSet(ModelViewSet):
         "price",
         "date",
         "review_count",
+        "rating",
     ]
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.annotate(review_count=Count('reviews'))
+        queryset = queryset.annotate(review_count=Count('reviews'), rating=Avg('reviews__rate'))
         category_id = self.request.query_params.get("category")
         if category_id:
             category_ids = self.get_all_category_ids(category_id)
@@ -97,7 +98,6 @@ class ReviewsProductViewSet(APIView):
                                       text=request.data['text'],
                                       rate=int(request.data['rate']))
         reviews = Reviews.objects.filter(product_id=int(id))
-        print(ReviewsSerializer(reviews, many=True, read_only=True).data)
         return Response(ReviewsSerializer(reviews, many=True, read_only=True).data, status=status.HTTP_200_OK)
 
 
@@ -115,7 +115,7 @@ class PopularProductViewSet(ModelViewSet):
 
 
 class LimitedProductViewSet(ModelViewSet):
-    queryset = Product.objects.prefetch_related("images").all()
+    queryset = Product.objects.prefetch_related("images").filter(available=True).all()
     pagination_class = None
     serializer_class = ProductSerializer
 
