@@ -2,6 +2,8 @@ from django.core.paginator import Paginator
 from django.db.models import Count, Q, Avg
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiResponse, extend_schema_view, OpenApiParameter
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -33,6 +35,43 @@ class ProductPagination(PageNumberPagination):
         })
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Список продуктов",
+        description="Получение списка продуктов с пагинацией. Можно фильтровать и сортировать с помощью параметров "
+                    "запроса.",
+        parameters=[
+            OpenApiParameter(name='category', description='Фильтрация по ID категории', required=False,
+                             type=OpenApiTypes.INT),
+            OpenApiParameter(name='sort', description='Сортировка по полю (например, price, date, reviews)',
+                             required=False, type=OpenApiTypes.STR),
+            OpenApiParameter(name='sortType', description='Тип сортировки: inc (возрастание) или dec (убывание)',
+                             required=False, type=OpenApiTypes.STR),
+        ],
+    ),
+    retrieve=extend_schema(
+        summary="Список продуктов отфильтрованных по id",
+        description="Получение списка продуктов отфильтрованных по id с пагинацией. Можно фильтровать и сортировать с "
+                    "помощью параметров"
+                    " запроса.",
+        parameters=[
+            OpenApiParameter(name='category', description='Фильтрация по ID категории', required=False,
+                             type=OpenApiTypes.INT),
+            OpenApiParameter(name='sort', description='Сортировка по полю (например, price, date, reviews)',
+                             required=False, type=OpenApiTypes.STR),
+            OpenApiParameter(name='sortType', description='Тип сортировки: inc (возрастание) или dec (убывание)',
+                             required=False, type=OpenApiTypes.STR),
+        ],
+        responses={
+            200: ProductSerializer,
+            404: OpenApiResponse(description="Продукт по id не был найден"),
+        }
+    ),
+    create=extend_schema(exclude=True),
+    update=extend_schema(exclude=True),
+    partial_update=extend_schema(exclude=True),
+    destroy=extend_schema(exclude=True),
+)
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -85,6 +124,7 @@ class ProductViewSet(ModelViewSet):
 
 
 class CurrentUser(APIView):
+    @extend_schema(exclude=True)
     def get(self, request):
         if request.user.is_authenticated:
             return Response({'username': request.user.username, 'email': request.user.email}, status=status.HTTP_200_OK)
@@ -92,6 +132,25 @@ class CurrentUser(APIView):
 
 
 class ReviewsProductViewSet(APIView):
+    @extend_schema(
+        summary="Добавление пользовательского отзыва",
+        description=(
+                "Этот метод позволяет пользователю добавить отзыв о товаре. "
+                "Пользователь должен быть аутентифицирован. "
+                "В запросе необходимо передать текст отзыва и рейтинг."
+        ),
+        request=ReviewsSerializer,
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                response=ReviewsSerializer(many=True),
+                description="Список отзывов для данного товара после добавления нового отзыва."
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                response=None,
+                description="Некорректные данные в запросе."
+            ),
+        },
+    )
     def post(self, request, id):
         Reviews.objects.get_or_create(product_id=int(id),
                                       author=request.user,
@@ -102,24 +161,58 @@ class ReviewsProductViewSet(APIView):
 
 
 class CategoriesView(APIView):
+    @extend_schema(
+        summary="Получить список категорий",
+        description="Этот эндпоинт возвращает список категорий",
+        responses={
+            status.HTTP_200_OK: CategorySerializer(many=True),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(description="Ошибка запроса, например, неверные параметры"),
+        },
+    )
     def get(self, request: Request):
         categories = Category.objects.filter(parent__isnull=True)
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@extend_schema_view(
+    list=extend_schema(summary="Список популярных продуктов",
+                       description="Получает список популярных продуктов"),
+    create=extend_schema(exclude=True),
+    update=extend_schema(exclude=True),
+    partial_update=extend_schema(exclude=True),
+    destroy=extend_schema(exclude=True),
+    retrieve=extend_schema(exclude=True)
+)
 class PopularProductViewSet(ModelViewSet):
     queryset = Product.objects.prefetch_related("images").filter(available=True).order_by('-count')[:8]
     pagination_class = None
     serializer_class = ProductSerializer
 
 
+@extend_schema_view(
+    list=extend_schema(summary="Список продуктов ограниченного тиража",
+                       description="Получает список продуктов ограниченного тиража"),
+    create=extend_schema(exclude=True),
+    update=extend_schema(exclude=True),
+    partial_update=extend_schema(exclude=True),
+    destroy=extend_schema(exclude=True),
+    retrieve=extend_schema(exclude=True)
+)
 class LimitedProductViewSet(ModelViewSet):
     queryset = Product.objects.prefetch_related("images").filter(available=True).all()
     pagination_class = None
     serializer_class = ProductSerializer
 
 
+@extend_schema_view(
+    list=extend_schema(summary="Список тэгов продукта",
+                       description="Получает список тэгов продукта"),
+    create=extend_schema(exclude=True),
+    update=extend_schema(exclude=True),
+    partial_update=extend_schema(exclude=True),
+    destroy=extend_schema(exclude=True),
+)
 class TagsViewSet(ModelViewSet):
     queryset = Tag.objects.all()
     pagination_class = None

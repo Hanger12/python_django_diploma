@@ -1,5 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.parsers import JSONParser, MultiPartParser
@@ -10,18 +12,25 @@ from io import BytesIO
 from .models import Profile
 from .serializers import UserCreateSerializer, ProfileSerializer, ChangePasswordSerializer, ProfileUpdateSerializer
 
-# class UserViewSet(ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializers
-#
-#     @action(detail=False, methods=["post"], parser_classes=[parsers.JSONParser, ])
-#     @csrf_exempt
-#     def sign_up(self, request):
-#         print("zdec:" + request)
-#         return Response({
-#             "blat pochemu ne robit": 3
-#         }, status=status.HTTP_201_CREATED)
 
+@extend_schema(
+    summary="Вход пользователя",
+    description="Эндпоинт для авторизации пользователя по логину и паролю.",
+    request={
+        'application/json': {
+            "type": "object",
+            "properties": {
+                "username": {"type": "string", "description": "login пользователя"},
+                "password": {"type": "string", "description": "Пароль"},
+            },
+            "required": ["username", "password"],
+        }
+    },
+    responses={
+        200: OpenApiResponse(description="Пользователь успешно аутентифицирован"),
+        401: OpenApiResponse(description="Неверные учетные данные")
+    },
+)
 @api_view(['POST'])
 @csrf_exempt
 def user_sign_in(request: Request, format=None) -> Response:
@@ -40,6 +49,14 @@ def user_sign_in(request: Request, format=None) -> Response:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
+@extend_schema(
+    summary="Выход пользователя",
+    description="Эндпоинт для выхода пользователя",
+    responses={
+        200: OpenApiResponse(description="Выход успешен"),
+        400: OpenApiResponse(description="пользователь не был аутентифицирован")
+    },
+)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def user_sign_out(request: Request) -> Response:
@@ -52,6 +69,25 @@ def user_sign_out(request: Request) -> Response:
             return Response({"Error": str(exp)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@extend_schema(
+    summary="Регистрация пользователя",
+    request={
+        'application/json': {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string", "description": "Имя пользователя"},
+                "username": {"type": "string", "description": "login пользователя"},
+                "password": {"type": "string", "description": "Пароль"},
+
+            },
+            "required": ["name", "username", "password"],
+        }
+    },
+    responses={
+        200: OpenApiResponse(description="Пользователь успешно зарегистрирован"),
+        400: OpenApiResponse(description="Такой пользователь уже существует")
+    }
+)
 @api_view(["POST"])
 def user_sign_up(request: Request) -> Response:
     """Функция 'user_sign_up': обрабатывает POST запрос на регистрацию пользователя"""
@@ -68,10 +104,19 @@ def user_sign_up(request: Request) -> Response:
                                 password=data['password'])
             login(request=request, user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    summary="Получение и обновление профиля пользователя",
+    description="Получение информации о профиле пользователя (GET) и обновление информации о профиле (POST).",
+    request=ProfileUpdateSerializer,
+    responses={
+        200: ProfileSerializer,
+        400: OpenApiResponse(description="Ошибка валидации данных"),
+        401: OpenApiResponse(description="Необходима аутентификация")
+    }
+)
 @api_view(["POST", "GET"])
 @permission_classes([IsAuthenticated])
 def user_profile(request: Request) -> Response:
@@ -110,6 +155,34 @@ def user_profile(request: Request) -> Response:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(
+    summary="Обновление аватара пользователя",
+    description=(
+            "Этот метод позволяет пользователю загрузить и обновить свой аватар. "
+            "Запрос должен содержать файл аватара в формате multipart/form-data. "
+            "После успешного обновления аватара возвращается статус 201 Created."
+    ),
+    request={"type": "object",
+             "properties": {
+                 "avatar": {
+                     "type": "string",
+                     "format": "binary",
+                     "description": "Файл изображения для аватара пользователя"
+                 }
+             },
+             "required": ["avatar"]
+             },
+    responses={
+        status.HTTP_201_CREATED: OpenApiResponse(
+            response=None,
+            description="Аватар успешно обновлён."
+        ),
+        status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+            response=None,
+            description="Ошибка в запросе. Возможно, файл аватара не был предоставлен."
+        ),
+    },
+)
 @api_view(["POST"])
 @parser_classes([MultiPartParser, ])
 def user_avatar(request: Request) -> Response:
@@ -120,6 +193,20 @@ def user_avatar(request: Request) -> Response:
         return Response(status=status.HTTP_201_CREATED)
 
 
+@extend_schema(
+    summary="Обновление пароля пользователя",
+    description="Этот эндпоинт позволяет пользователю изменить свой пароль. Необходимо предоставить старый и новый "
+                "пароль в теле запроса.",
+    request=ChangePasswordSerializer,
+    responses={
+        200: OpenApiResponse(
+            description="Пароль успешно изменен",
+        ),
+        400: OpenApiResponse(
+            description="Ошибки валидации данных",
+        )
+    }
+)
 @api_view(["POST"])
 def user_update_password(request: Request) -> Response:
     if request.method == "POST":

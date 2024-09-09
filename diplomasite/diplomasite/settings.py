@@ -36,10 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admindocs',
     'frontend',
     'rest_framework',
     'taggit',
     'django_filters',
+    'drf_spectacular',
     'accountapp.apps.AccountappConfig',
     'shopapp.apps.ShopappConfig',
     'basketapp.apps.BasketappConfig',
@@ -115,7 +117,15 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
     "PAGE_SIZE": 20,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "MY Site Megano shop",
+    "DESCRIPTION": "MY site with shop app ",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
