@@ -200,7 +200,7 @@ class PopularProductViewSet(ModelViewSet):
     retrieve=extend_schema(exclude=True)
 )
 class LimitedProductViewSet(ModelViewSet):
-    queryset = Product.objects.prefetch_related("images").filter(available=True).all()
+    queryset = Product.objects.prefetch_related("images").filter(available=True, limited=True).all()
     pagination_class = None
     serializer_class = ProductSerializer
 

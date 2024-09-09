@@ -30,22 +30,28 @@ class Product(models.Model):
     description = models.TextField(null=False, blank=True, db_index=True)
     price = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
-    count = models.IntegerField()
+    count = models.IntegerField(default=0)
     freeDelivery = models.BooleanField(default=False)
     available = models.BooleanField(default=True)
-
+    count_in_stock = models.IntegerField(null=False, blank=False)
+    limited = models.BooleanField(default=False)
     tags = TaggableManager()
 
     def __str__(self):
         return f"{self.title}"
 
-    # def save(self, *args, **kwargs):
-    #     # Если количество товара равно 0, устанавливаем доступность как False
-    #     if self.count == 0:
-    #         self.available = False
-    #     else:
-    #         self.available = True
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        # Если количество товара на складе меньше 10, устанавливаем limited как True
+        if 10 > self.count_in_stock > 0:
+            self.limited = True
+        else:
+            self.limited = False
+        if self.count_in_stock == 0:
+            self.available = False
+        else:
+            self.available = True
+
+        super().save(*args, **kwargs)
 
 
 class Reviews(models.Model):

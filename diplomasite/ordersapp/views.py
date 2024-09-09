@@ -149,12 +149,13 @@ class PayMentView(APIView):
         ),
     )
     def post(self, request, id):
-        order = Order.objects.get(id=id).only('id')
+        order = Order.objects.only('id').get(id=id)
         number = request.data['number']
         if int(number) % 2 == 0 and not number.endswith('0'):
-            order_items = OrderItem.objects.filter(order=order).prefetch_related('products')
+            order_items = OrderItem.objects.filter(order=order).prefetch_related('product')
             for item in order_items:
                 item.product.count += item.count
+                item.product.count_in_stock -= item.count
                 item.product.save()
             order.status = "accepted"
             order.paymentError = 'undefined'

@@ -72,7 +72,7 @@ class BasketView(APIView):
         if not product_id or quantity is None:
             return Response({'error': 'Invalid input'}, status=status.HTTP_400_BAD_REQUEST)
         product = get_object_or_404(Product, id=product_id)
-        if product.count == 0:
+        if product.count_in_stock == 0:
             return Response({'error': 'Invalid input'}, status=status.HTTP_400_BAD_REQUEST)
         if request.user.is_authenticated:
             # Для авторизованных пользователей
