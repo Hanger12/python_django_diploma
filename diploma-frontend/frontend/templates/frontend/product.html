@@ -42,9 +42,10 @@
                         <div class="ProductCard-desc">
                             <div class="ProductCard-header">
                                 <h2 class="ProductCard-title">${ product.title }$</h2>
+                                <h3 v-if="product.available === false" style="color: red">Товара нет в наличии</h3>
                                 <div class="ProductCard-info">
                                     <div class="ProductCard-cost">
-                                        <div class="ProductCard-price">$${ product.price }$
+                                        <div class="ProductCard-price">₽${ product.price }$
                                         </div>
                                     </div>
                                 </div>

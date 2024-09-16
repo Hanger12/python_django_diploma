@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.SerializerMethodField()
-    avatar = serializers.SerializerMethodField()
+    avatar = serializers.SerializerMethodField(required=False)
     fullName = serializers.SerializerMethodField()
 
     class Meta:
@@ -24,7 +24,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         return obj.user.email
 
     def get_avatar(self, obj):
-        return obj.avatar_info
+        if isinstance(obj, Profile):
+            return obj.avatar_info
+        return ''
 
     def get_fullName(self, obj):
         return obj.fullName

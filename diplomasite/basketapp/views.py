@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -29,6 +30,12 @@ def get_list_session_item(cart):
 class BasketView(APIView):
     """Представление корзины товаров, которое обрабатывает
     добавление/удаление/обновление/вывод товаров в корзину"""
+
+    @extend_schema(
+        summary="Получить список товаров в корзине",
+        description='',
+        responses=CartSerializer
+    )
     def get(self, request):
         """GET запрос обабатывает вывод товаров, находящиеся в корзине"""
         if request.user.is_authenticated:
@@ -51,6 +58,13 @@ class BasketView(APIView):
             cart = request.session.get('cart', {})
             return Response(get_list_session_item(cart), status=status.HTTP_200_OK)
 
+    @extend_schema(
+        summary="Добавить товар в корзину",
+        parameters=[OpenApiParameter('product_id', int, description='ID продукта'),
+                    OpenApiParameter('count', int, description='Количество товара')
+                    ],
+        responses=CartSerializer
+    )
     def post(self, request):
         """Добавление товара в корзину"""
         product_id = str(request.data.get('id'))
@@ -58,7 +72,7 @@ class BasketView(APIView):
         if not product_id or quantity is None:
             return Response({'error': 'Invalid input'}, status=status.HTTP_400_BAD_REQUEST)
         product = get_object_or_404(Product, id=product_id)
-        if product.count == 0:
+        if product.count_in_stock == 0:
             return Response({'error': 'Invalid input'}, status=status.HTTP_400_BAD_REQUEST)
         if request.user.is_authenticated:
             # Для авторизованных пользователей
@@ -82,6 +96,13 @@ class BasketView(APIView):
             request.session['cart'] = cart
             return Response(get_list_session_item(cart), status=status.HTTP_200_OK)
 
+    @extend_schema(
+        summary="Удалить товар из корзины",
+        parameters=[OpenApiParameter('product_id', int, description='ID продукта'),
+                    OpenApiParameter('count', int, description='Количество товара')
+                    ],
+        responses=CartSerializer()
+    )
     def delete(self, request: Request):
         """Удаление товаров из корзины"""
         product_id = str(request.data.get('id'))

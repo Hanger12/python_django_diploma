@@ -47,8 +47,8 @@ class ProductSerializer(serializers.ModelSerializer):
     specifications = SpecificationSerializer(many=True, read_only=True)
     reviews = ReviewsSerializer(many=True, read_only=True)
     images = ImagesProductSerializer(many=True, read_only=True)
-    fullDescription = serializers.SerializerMethodField()
-    description = serializers.SerializerMethodField()
+    fullDescription = serializers.SerializerMethodField(required=False)
+    description = serializers.SerializerMethodField(required=False)
     rating = serializers.SerializerMethodField()
 
     class Meta:
