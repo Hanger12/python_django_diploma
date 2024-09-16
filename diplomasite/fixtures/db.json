@@ -1,0 +1,551 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$o8d4e9DmP160SlntZmgWHa$0eyCcXsvLr9OsAuId2T9qmM8HfVzHLfSWVdjoj8uZ6g=",
+      "last_login": "2024-08-24T20:58:45.250Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "Petr",
+      "last_name": "Ivanov",
+      "email": "asdasda@mail.ru",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-07-27T09:40:01.052Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "taggit.tag",
+    "pk": 1,
+    "fields": {
+      "name": "Laptops",
+      "slug": "laptops"
+    }
+  },
+  {
+    "model": "taggit.tag",
+    "pk": 2,
+    "fields": {
+      "name": "Gaming",
+      "slug": "gaming"
+    }
+  },
+  {
+    "model": "taggit.tag",
+    "pk": 3,
+    "fields": {
+      "name": "smartphone",
+      "slug": "smartphone"
+    }
+  },
+  {
+    "model": "taggit.tag",
+    "pk": 4,
+    "fields": {
+      "name": "sadasd",
+      "slug": "sadasd"
+    }
+  },
+  {
+    "model": "taggit.tag",
+    "pk": 5,
+    "fields": {
+      "name": "photo",
+      "slug": "photo"
+    }
+  },
+  {
+    "model": "taggit.taggeditem",
+    "pk": 1,
+    "fields": {
+      "tag": 1,
+      "content_type": 12,
+      "object_id": 1
+    }
+  },
+  {
+    "model": "taggit.taggeditem",
+    "pk": 2,
+    "fields": {
+      "tag": 2,
+      "content_type": 12,
+      "object_id": 1
+    }
+  },
+  {
+    "model": "taggit.taggeditem",
+    "pk": 3,
+    "fields": {
+      "tag": 3,
+      "content_type": 12,
+      "object_id": 5
+    }
+  },
+  {
+    "model": "taggit.taggeditem",
+    "pk": 5,
+    "fields": {
+      "tag": 1,
+      "content_type": 12,
+      "object_id": 7
+    }
+  },
+  {
+    "model": "taggit.taggeditem",
+    "pk": 6,
+    "fields": {
+      "tag": 5,
+      "content_type": 12,
+      "object_id": 8
+    }
+  },
+  {
+    "model": "taggit.taggeditem",
+    "pk": 7,
+    "fields": {
+      "tag": 5,
+      "content_type": 12,
+      "object_id": 7
+    }
+  },
+  {
+    "model": "accountapp.profile",
+    "pk": 6,
+    "fields": {
+      "user": 1,
+      "middle_name": "Alesandrovich",
+      "phone": "+78802000600",
+      "avatar": "profile/user_admin/avatar/THE-BEST-FREE-SOFTWARE-FOR-YOUR-PC.jpg"
+    }
+  },
+  {
+    "model": "shopapp.category",
+    "pk": 1,
+    "fields": {
+      "title": "Компьютерная техника",
+      "image": "categories/category_1/pc-computer-with-monitor_icon-icons.com_56249.png",
+      "parent": null
+    }
+  },
+  {
+    "model": "shopapp.category",
+    "pk": 2,
+    "fields": {
+      "title": "ноутбуки",
+      "image": "categories/category_2/laptop_78931.png",
+      "parent": 1
+    }
+  },
+  {
+    "model": "shopapp.category",
+    "pk": 3,
+    "fields": {
+      "title": "Смартфоны и фотоаппараты",
+      "image": "categories/category_None/icons8multiplesmartphones_101617.png",
+      "parent": null
+    }
+  },
+  {
+    "model": "shopapp.category",
+    "pk": 4,
+    "fields": {
+      "title": "Смартфоны",
+      "image": "categories/category_4/077mobile_101493.png",
+      "parent": 3
+    }
+  },
+  {
+    "model": "shopapp.category",
+    "pk": 5,
+    "fields": {
+      "title": "Фотоаппараты",
+      "image": "categories/category_None/photocameraoutline_80020.png",
+      "parent": 3
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 1,
+    "fields": {
+      "category": 2,
+      "title": "Lang",
+      "description": "Cool laptop",
+      "price": "50000.00",
+      "date": "2024-08-06T12:41:14.486Z",
+      "count": 0,
+      "freeDelivery": true,
+      "available": false
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 5,
+    "fields": {
+      "category": 4,
+      "title": "Smartphone",
+      "description": "Cool Smartphone iphone 15",
+      "price": "4000.00",
+      "date": "2024-08-07T17:53:53.426Z",
+      "count": 10,
+      "freeDelivery": false,
+      "available": true
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 7,
+    "fields": {
+      "category": 2,
+      "title": "New dashboard",
+      "description": "dfdsfdsfdsfdsfdsfdsfds",
+      "price": "1000.00",
+      "date": "2024-08-11T18:59:32.143Z",
+      "count": 10,
+      "freeDelivery": false,
+      "available": true
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 8,
+    "fields": {
+      "category": 5,
+      "title": "Фотоаппарат",
+      "description": "лучший фотоаппарат canon",
+      "price": "10000.00",
+      "date": "2024-08-12T21:12:41.809Z",
+      "count": 10,
+      "freeDelivery": false,
+      "available": true
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 1,
+    "fields": {
+      "text": "выавыа",
+      "product": 1,
+      "author": 1,
+      "date": "2024-08-06T19:17:14.496Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 6,
+    "fields": {
+      "text": "dsf",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-14T20:17:20.944Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 7,
+    "fields": {
+      "text": "dsf",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-14T20:17:51.842Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 8,
+    "fields": {
+      "text": "dgthgj",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-14T20:20:29.234Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 9,
+    "fields": {
+      "text": "Все норм",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-14T20:21:53.081Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 10,
+    "fields": {
+      "text": "dsfds",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-14T20:28:57.601Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 11,
+    "fields": {
+      "text": "dfgdfg",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-14T20:37:38.686Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 13,
+    "fields": {
+      "text": "Плохой ноут не берите, пожалел о покупке",
+      "product": 1,
+      "author": 1,
+      "date": "2024-08-20T17:09:03.690Z",
+      "rate": 1
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 1,
+    "fields": {
+      "name": "OS",
+      "value": "Windows",
+      "product": [
+        7
+      ]
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 2,
+    "fields": {
+      "name": "OS",
+      "value": "IOS 18",
+      "product": [
+        5
+      ]
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 3,
+    "fields": {
+      "name": "screen",
+      "value": "APS",
+      "product": []
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 6,
+    "fields": {
+      "name": "диагональ экрана",
+      "value": "17.3",
+      "product": [
+        1,
+        7
+      ]
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 7,
+    "fields": {
+      "name": "OS",
+      "value": "Windows 11",
+      "product": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 8,
+    "fields": {
+      "name": "Матрица",
+      "value": "IPS",
+      "product": [
+        1,
+        5,
+        7
+      ]
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 9,
+    "fields": {
+      "name": "Линза",
+      "value": "Глянцевая",
+      "product": [
+        8
+      ]
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 6,
+    "fields": {
+      "product": 1,
+      "image": "products/product_1/images/728a59cc06b838a3e15acbbdde289294ac05e908308167da9628fa3f7ad9222a.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 7,
+    "fields": {
+      "product": 1,
+      "image": "products/product_1/images/07efead2ca2628e0014487e98578e23f5106d593acea4bf99153ec5c95c9b31b.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 8,
+    "fields": {
+      "product": 1,
+      "image": "products/product_1/images/00531b8fd5741f428c0666e46e44347488eed017c0dc5aae2aeae5809796e3fc.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 9,
+    "fields": {
+      "product": 1,
+      "image": "products/product_1/images/88b9c22cd03ccbb87ef0cbd9b40d90e1ca3bac1013360b91ba73a4882c05c80b.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 10,
+    "fields": {
+      "product": 5,
+      "image": "products/product_5/images/2258685cc32bbd96de406852bd9b2d94916029658cd6fa120a9f97a4bc0af297.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 11,
+    "fields": {
+      "product": 5,
+      "image": "products/product_5/images/be0cbf2360c7489de2559c39d58b08e0517a9546502a3bc859b4ee678c42427b.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 12,
+    "fields": {
+      "product": 5,
+      "image": "products/product_5/images/6e73e4d1de3f4e55914bfa3e658b71fe56ec5cfd98e1e38e1dcbaef293dd0c6c.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 13,
+    "fields": {
+      "product": 5,
+      "image": "products/product_5/images/712f29edfb356bb1be9e872dc4b8cdc70be18a81182698eeae7b431083d8b009.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 14,
+    "fields": {
+      "product": 5,
+      "image": "products/product_5/images/0618ce76feb9d36deefd8c81f404e2f30be58f754eeae668c91dad47a48f4eed.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 15,
+    "fields": {
+      "product": 5,
+      "image": "products/product_5/images/2bf0b010ed6934a412d74ac8b89da4d3e719e8f1b299fd3c745b4ea00fcd8a71.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 17,
+    "fields": {
+      "product": 7,
+      "image": "products/product_7/images/isometric-laptop-analysis-information-futuristic-concept-vector.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 18,
+    "fields": {
+      "product": 8,
+      "image": "products/product_8/images/a6965dcbddcec201c585a38bfdc5f489c8d2621bca568fb91ce1231f088e8abd.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 19,
+    "fields": {
+      "product": 8,
+      "image": "products/product_8/images/52134dfccd329f6b06ded37ab11d74c38eb476852524c9d49363d03a17055752.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 20,
+    "fields": {
+      "product": 8,
+      "image": "products/product_8/images/794e8ac7eb1dc6e8ca28146b2456707f69f58425f62099cb76438350128daab0.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 21,
+    "fields": {
+      "product": 8,
+      "image": "products/product_8/images/4082b90fec877eedfd040e383f5cd79eac6622efc56dd0a87a2a2fc7c8d81e3e.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 22,
+    "fields": {
+      "product": 8,
+      "image": "products/product_8/images/76383c18bc095eec25c053a5559e6625fae613824ac3b746e7a518ec2c0c6009.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 23,
+    "fields": {
+      "product": 8,
+      "image": "products/product_8/images/ce61f1bc18cff6ea35843530d76c647a715ed226ba0c801f6a1822d87412e1cd.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 24,
+    "fields": {
+      "product": 8,
+      "image": "products/product_8/images/d3edf7deafa8667adc1cdb037e2f6f4d762a3b695ab76cf5f45ef4921094b3e4.jpg"
+    }
+  },
+  {
+    "model": "basketapp.cart",
+    "pk": 1,
+    "fields": {
+      "user": 1
+    }
+  },
+  {
+    "model": "basketapp.cartitem",
+    "pk": 28,
+    "fields": {
+      "cart": 1,
+      "product": 8,
+      "count": 6
+    }
+  }
+]

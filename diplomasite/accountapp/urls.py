@@ -18,6 +18,6 @@ urlpatterns = [
     path("sign-out", user_sign_out, name="sign-out"),
     path("profile", user_profile, name="profile"),
     path('profile/avatar', user_avatar, name="avatar"),
-    path('profile/password', user_update_password, name="update_pasword")
+    path('profile/password', user_update_password, name="update_password")
     # path("", include(accountrouter.urls), name="profile"),
 ]

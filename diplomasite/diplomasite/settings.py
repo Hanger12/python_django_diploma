@@ -36,11 +36,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admindocs',
     'frontend',
     'rest_framework',
-    'phonenumber_field',
-    'rest_framework.authtoken',
+    'taggit',
+    'django_filters',
+    'drf_spectacular',
     'accountapp.apps.AccountappConfig',
+    'shopapp.apps.ShopappConfig',
+    'basketapp.apps.BasketappConfig',
+    'ordersapp.apps.OrdersappConfig'
 
 ]
 
@@ -79,12 +84,8 @@ WSGI_APPLICATION = 'diplomasite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',
-        'PORT': 5432,
-        'NAME': 'online_store_db',
-        'USER': 'postgres',
-        'PASSWORD': '12345',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -106,22 +107,32 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%d-%m-%Y %H:%M:%S",
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-    # ],
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
+    "PAGE_SIZE": 20,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "MY Site Megano shop",
+    "DESCRIPTION": "MY site with shop app ",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -137,45 +148,46 @@ LOGFILE_NAME = BASE_DIR / "log.txt"
 LOGFILE_SIZE = 1 * 1024 * 1024
 LOGFILE_COUNT = 4
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {
-            "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        }
-    },
-    # "filters": {
+    # 'version': 1,
+    # 'disable_existing_loggers': False,
+    # # "formatters": {
+    # #     "verbose": {
+    # #         "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    # #     }
+    # # },
+    # 'filters': {
     #     'require_debug_true': {
     #         '()': 'django.utils.log.RequireDebugTrue',
     #     },
     # },
-    "handlers": {
-        "console": {
-            # "level": 'DEBUG',
-            # "filters": ['require_debug_true'],
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
-        },
-        "logfile": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": LOGFILE_NAME,
-            "maxBytes": LOGFILE_SIZE,
-            "backupCount": LOGFILE_COUNT,
-            "formatter": "verbose",
-        },
-    },
-    # 'logger': {
+    # 'handlers': {
+    #     'console': {
+    #         'level': 'DEBUG',
+    #         'filters': ['require_debug_true'],
+    #         'class': 'logging.StreamHandler',
+    #         # "formatter": "verbose",
+    #     },
+    #     # 'logfile': {
+    #     #     "class": "logging.handlers.RotatingFileHandler",
+    #     #     "filename": LOGFILE_NAME,
+    #     #     "maxBytes": LOGFILE_SIZE,
+    #     #     "backupCount": LOGFILE_COUNT,
+    #     #     "formatter": "verbose",
+    #     # },
+    # },
+    # 'loggers': {
     #     'django.db.backends': {
     #         'level': 'DEBUG',
     #         'handlers': ['console'],
     #     },
     # },
-    "root": {
-        "handlers": ['console', "logfile",],
-        "level": "DEBUG",
-    }
+    # 'root': {
+    #     'handlers': ['console',],
+    #     'level': 'DEBUG',
+    # }
 }
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
+# CART_SESSION_ID = 'cart'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
