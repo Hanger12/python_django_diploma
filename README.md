@@ -8,7 +8,7 @@
 
 1. **Клонируйте репозиторий** с помощью команды:
     ```bash
-    git clone [ссылка](https://github.com/Hanger12/python_django_diploma.git)
+    git clone https://github.com/Hanger12/python_django_diploma.git
     ```
 
 2. **Перейдите в директорию проекта**:
