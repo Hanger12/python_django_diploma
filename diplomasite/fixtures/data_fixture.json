@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "password": "pbkdf2_sha256$720000$o8d4e9DmP160SlntZmgWHa$0eyCcXsvLr9OsAuId2T9qmM8HfVzHLfSWVdjoj8uZ6g=",
-      "last_login": "2024-08-24T20:58:45.250Z",
+      "last_login": "2024-09-08T08:18:07.312Z",
       "is_superuser": true,
       "username": "admin",
       "first_name": "Petr",
@@ -13,6 +13,42 @@
       "is_staff": true,
       "is_active": true,
       "date_joined": "2024-07-27T09:40:01.052Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$bnxUarq8pZPG9xQA8Js3RQ$+Kxv7Icy0iieRugaiM38IFkas8HrB88gPPEuHZpLE78=",
+      "last_login": "2024-09-02T14:40:08.243Z",
+      "is_superuser": false,
+      "username": "bob12",
+      "first_name": "artem",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-09-02T14:40:06.122Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$yaPBHfNaLbwYiz96cUtler$NyKayZa9/OaKvB66jXmNPJAEgTq+kwr3oEbq7ZnpO+A=",
+      "last_login": "2024-09-02T19:57:47.487Z",
+      "is_superuser": false,
+      "username": "rutune",
+      "first_name": "Рутун",
+      "last_name": "Иванов",
+      "email": "Rutune@mail.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-09-02T19:57:45.516Z",
       "groups": [],
       "user_permissions": []
     }
@@ -43,14 +79,6 @@
   },
   {
     "model": "taggit.tag",
-    "pk": 4,
-    "fields": {
-      "name": "sadasd",
-      "slug": "sadasd"
-    }
-  },
-  {
-    "model": "taggit.tag",
     "pk": 5,
     "fields": {
       "name": "photo",
@@ -62,7 +90,7 @@
     "pk": 1,
     "fields": {
       "tag": 1,
-      "content_type": 12,
+      "content_type": 10,
       "object_id": 1
     }
   },
@@ -71,7 +99,7 @@
     "pk": 2,
     "fields": {
       "tag": 2,
-      "content_type": 12,
+      "content_type": 10,
       "object_id": 1
     }
   },
@@ -80,7 +108,7 @@
     "pk": 3,
     "fields": {
       "tag": 3,
-      "content_type": 12,
+      "content_type": 10,
       "object_id": 5
     }
   },
@@ -89,7 +117,7 @@
     "pk": 5,
     "fields": {
       "tag": 1,
-      "content_type": 12,
+      "content_type": 10,
       "object_id": 7
     }
   },
@@ -98,7 +126,7 @@
     "pk": 6,
     "fields": {
       "tag": 5,
-      "content_type": 12,
+      "content_type": 10,
       "object_id": 8
     }
   },
@@ -107,8 +135,17 @@
     "pk": 7,
     "fields": {
       "tag": 5,
-      "content_type": 12,
+      "content_type": 10,
       "object_id": 7
+    }
+  },
+  {
+    "model": "taggit.taggeditem",
+    "pk": 8,
+    "fields": {
+      "tag": 5,
+      "content_type": 10,
+      "object_id": 9
     }
   },
   {
@@ -119,6 +156,26 @@
       "middle_name": "Alesandrovich",
       "phone": "+78802000600",
       "avatar": "profile/user_admin/avatar/THE-BEST-FREE-SOFTWARE-FOR-YOUR-PC.jpg"
+    }
+  },
+  {
+    "model": "accountapp.profile",
+    "pk": 7,
+    "fields": {
+      "user": 2,
+      "middle_name": "",
+      "phone": null,
+      "avatar": ""
+    }
+  },
+  {
+    "model": "accountapp.profile",
+    "pk": 8,
+    "fields": {
+      "user": 3,
+      "middle_name": "Ивананович",
+      "phone": "+78807000600",
+      "avatar": "profile/user_rutune/avatar/THE-BEST-FREE-SOFTWARE-FOR-YOUR-PC.jpg"
     }
   },
   {
@@ -175,9 +232,11 @@
       "description": "Cool laptop",
       "price": "50000.00",
       "date": "2024-08-06T12:41:14.486Z",
-      "count": 0,
+      "count": 2,
       "freeDelivery": true,
-      "available": false
+      "available": true,
+      "count_in_stock": 18,
+      "limited": false
     }
   },
   {
@@ -191,7 +250,9 @@
       "date": "2024-08-07T17:53:53.426Z",
       "count": 10,
       "freeDelivery": false,
-      "available": true
+      "available": true,
+      "count_in_stock": 20,
+      "limited": false
     }
   },
   {
@@ -205,7 +266,9 @@
       "date": "2024-08-11T18:59:32.143Z",
       "count": 10,
       "freeDelivery": false,
-      "available": true
+      "available": true,
+      "count_in_stock": 20,
+      "limited": false
     }
   },
   {
@@ -219,7 +282,25 @@
       "date": "2024-08-12T21:12:41.809Z",
       "count": 10,
       "freeDelivery": false,
-      "available": true
+      "available": true,
+      "count_in_stock": 20,
+      "limited": false
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 9,
+    "fields": {
+      "category": 5,
+      "title": "Компактный фотоаппарат",
+      "description": "Высококачественная компактная камера Canon Digital IXUS 285 HS исполнена в практичном черном цвете. Пластиковый корпус повышенной прочности надежно предохранит уязвимую электронику агрегата при его возможных падениях с небольшой высоты. Вес модели составляет всего 147 г. Вы с легкостью сможете всегда иметь фотоаппарат в сумке или в рюкзаке, чтобы в подходящий момент извлечь его и сделать снимок.\r\nCanon Digital IXUS 285 HS поставляется совместно с аккумулятором, фирменным зарядным устройством, а также крепким ремешком. Последний позволит надежно зафиксировать аппарат на запястье. Аккумулятор типа NB-11LH после полного цикла зарядки позволит Вам сделать 180 фото. Более того, модель способна делать видео в формате Full HD. Максимальное время ролика может составлять 60 мин.",
+      "price": "48299.00",
+      "date": "2024-09-09T09:46:26.747Z",
+      "count": 3,
+      "freeDelivery": false,
+      "available": true,
+      "count_in_stock": 3,
+      "limited": true
     }
   },
   {
@@ -311,6 +392,149 @@
     }
   },
   {
+    "model": "shopapp.reviews",
+    "pk": 14,
+    "fields": {
+      "text": "Могу сказать, что данный товар слишком дорогой идите лесом с такими ценами ",
+      "product": 1,
+      "author": 1,
+      "date": "2024-08-26T16:20:23.918Z",
+      "rate": 2
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 15,
+    "fields": {
+      "text": "Ноут, слишком классный, но я слишком нищий",
+      "product": 1,
+      "author": 1,
+      "date": "2024-08-26T16:22:30.311Z",
+      "rate": 1
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 16,
+    "fields": {
+      "text": "Фотографирует нормально",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-26T18:33:58.368Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 17,
+    "fields": {
+      "text": "Фоткает хорошо",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-26T18:38:44.142Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 18,
+    "fields": {
+      "text": "выавыавыавыа",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-26T18:45:58.970Z",
+      "rate": 1
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 19,
+    "fields": {
+      "text": "sdfdsf",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-26T18:49:34.215Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 20,
+    "fields": {
+      "text": "sadasdasd",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-26T18:51:13.950Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 21,
+    "fields": {
+      "text": "sdfdsfdsf",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-26T18:52:57.025Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 22,
+    "fields": {
+      "text": "sdfsdfdsf",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-26T18:54:51.210Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 23,
+    "fields": {
+      "text": "dsfsdfdsf",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-26T18:57:08.789Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 24,
+    "fields": {
+      "text": "dsfdsf",
+      "product": 8,
+      "author": 1,
+      "date": "2024-08-26T19:11:59.713Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 25,
+    "fields": {
+      "text": "Нормальный телефон, и за такую цену",
+      "product": 5,
+      "author": 3,
+      "date": "2024-09-02T20:05:18.414Z",
+      "rate": 5
+    }
+  },
+  {
+    "model": "shopapp.reviews",
+    "pk": 26,
+    "fields": {
+      "text": "string",
+      "product": 5,
+      "author": 1,
+      "date": "2024-09-09T08:04:34.067Z",
+      "rate": 4
+    }
+  },
+  {
     "model": "shopapp.specification",
     "pk": 1,
     "fields": {
@@ -384,7 +608,52 @@
       "name": "Линза",
       "value": "Глянцевая",
       "product": [
-        8
+        8,
+        9
+      ]
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 10,
+    "fields": {
+      "name": "Тип",
+      "value": "компактный фотоаппарат",
+      "product": [
+        9
+      ]
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 11,
+    "fields": {
+      "name": "модель",
+      "value": "Canon Digital IXUS 285 HS",
+      "product": [
+        9
+      ]
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 12,
+    "fields": {
+      "name": "Общее число пикселей",
+      "value": "21.1 Мп",
+      "product": [
+        9
+      ]
+    }
+  },
+  {
+    "model": "shopapp.specification",
+    "pk": 13,
+    "fields": {
+      "name": "тип матрицы",
+      "value": "CMOS",
+      "product": [
+        9
       ]
     }
   },
@@ -533,19 +802,75 @@
     }
   },
   {
-    "model": "basketapp.cart",
-    "pk": 1,
+    "model": "shopapp.imagesproduct",
+    "pk": 25,
     "fields": {
-      "user": 1
+      "product": 9,
+      "image": "products/product_9/images/dbcc51f9478aa90185503c051b16a97018ec060173a15b130578fdd7434e56ac.jpg"
     }
   },
   {
-    "model": "basketapp.cartitem",
+    "model": "shopapp.imagesproduct",
+    "pk": 26,
+    "fields": {
+      "product": 9,
+      "image": "products/product_9/images/75b6b78694af900b50b590934aaf4eeea143cab9bc9a2f53bd9e624b1f7cb314.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 27,
+    "fields": {
+      "product": 9,
+      "image": "products/product_9/images/2ad2115b232a17a9cc76b25bb898fe13835f721c19779886ff04bfdcd512c947.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
     "pk": 28,
     "fields": {
-      "cart": 1,
-      "product": 8,
-      "count": 6
+      "product": 9,
+      "image": "products/product_9/images/e1618a07eb36f03bc8f8951d8eff943f8771055a017ecce03cfa739d139a61a9.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 29,
+    "fields": {
+      "product": 9,
+      "image": "products/product_9/images/bd204c461aa4ed3eebac14f8e6145e510ffcb95a980874df9ba9f86455ded1cb.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 30,
+    "fields": {
+      "product": 9,
+      "image": "products/product_9/images/059894fa760d3d089ae6c894dd8dcb08a7840ef9a2235c765dab1bdbc3c5a0ce.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 31,
+    "fields": {
+      "product": 9,
+      "image": "products/product_9/images/509aed997a65df399d72ab01039d2c6579e78fe59d181a6e9faf5e0cec4487c4.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 32,
+    "fields": {
+      "product": 9,
+      "image": "products/product_9/images/da39a6003b7b33c5aeb551c06a919116858fe881b319aa1058b0bfe3e8f77787.jpg"
+    }
+  },
+  {
+    "model": "shopapp.imagesproduct",
+    "pk": 33,
+    "fields": {
+      "product": 9,
+      "image": "products/product_9/images/32d087d861666defd7f48c5390f89061a54db3aa7d00cfc7d1476b11366ae7d9.jpg"
     }
   }
 ]
